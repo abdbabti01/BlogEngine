@@ -12,5 +12,7 @@ namespace BlogAPI.Data
         public DataContext(DbContextOptions options) : base(options){}
 
         public DbSet<Post> Posts { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
     }
 }
