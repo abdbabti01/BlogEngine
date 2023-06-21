@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlogAPI.Controllers
 {
-    public class CategoryController : BaseController
+    public class CategoriesController : BaseController
     {
 
         private readonly ICategoryRepository _categoryRepository;
@@ -17,7 +17,7 @@ namespace BlogAPI.Controllers
         private readonly IPostRepository _postRepository;
 
         private readonly IMapper _mapper;   
-        public CategoryController(ICategoryRepository categoryRepository, IPostRepository postRepository, IMapper mapper)
+        public CategoriesController(ICategoryRepository categoryRepository, IPostRepository postRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
             _postRepository = postRepository;
