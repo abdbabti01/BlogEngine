@@ -10,6 +10,7 @@ export class CategoryService {
 
   baseurl = 'http://localhost:5115/api/';
   categories: Category[] = [];
+  category: Category | undefined;
 
   constructor(private http: HttpClient) {}
 
@@ -22,4 +23,40 @@ export class CategoryService {
       })
     )
   }
+
+  getCategory(title: string){
+    const category = this.categories.find(x => x.title == title);
+    if(category) return of(category);
+    return this.http.get<Category>(this.baseurl + 'categories/' + title).pipe(
+      map(category => {
+        this.category = category
+        return category;
+      }))
+  }
+
+  add(model: any){   
+    return this.http.post<Category>(this.baseurl + 'Categories/addCategory', model).pipe(
+      map((response: Category) => {
+        const cat = response;
+        this.categories = []; 
+        if(cat){
+          localStorage.setItem('user', JSON.stringify(cat));
+        }
+      })
+    )
+  }
+
+
+  edit(model: any){    
+    return this.http.put<Category>(this.baseurl + 'Categories/updateCategory', model).pipe(
+      map((response: Category) => {
+        const cat = response;
+        this.categories = []; 
+        if(cat){
+          localStorage.setItem('user', JSON.stringify(cat));
+        }
+      })
+    )
+  }
+
 }

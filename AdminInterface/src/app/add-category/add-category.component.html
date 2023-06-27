@@ -1,1 +1,25 @@
-<p>add-category works!</p>
+
+
+<form #editForm="ngForm" (ngSubmit)="add()" autocomplete="off" ngNativeValidate>
+    <h2 class="text-center"> Add Category</h2>
+    <hr>
+    <div class="mb-3" class="d-flex">
+        <h1 class="me-5">title</h1>
+        <input
+            name="title"
+            id="title"
+            [(ngModel)]="model.title"
+            class="form-control ms-5" 
+            type="text" 
+            placeholder="title" 
+            required
+            minlength="1"
+            #name="ngModel"/>
+    </div>
+    <div class="mt-3">
+        <button class="btn btn-success" class="btn btn-outline-secondary btn-lg px-5"type="submit">Save</button>
+        <!-- <button class="btn btn-default" type="button">cancel</button> -->
+    </div>
+   
+</form>
+

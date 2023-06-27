@@ -9,11 +9,16 @@ namespace BlogAPI.Interfaces
 {
     public interface ICategoryRepository
     {
-        void UpdatePost(Category category);
+        void UpdateCategoryAsync(Category category);
+
+        void AddCategory(Category category);
 
         Task<bool> SaveAllAsync();
 
         Task<Category> GetCategoryByIdAsync(int id);
+
+        Task<Category> GetCategoryByTitleAsync(string title);
+        
 
         Task<IEnumerable<Category>> GetCategoriesAsync();
         

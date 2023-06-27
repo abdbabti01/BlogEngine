@@ -14,11 +14,15 @@ namespace BlogAPI.Interfaces
 
         Task<bool> SaveAllAsync();
 
+        void AddPost(Post post);
+
         Task<Post> GetPostByIdAsync(int id);
 
         Task<IEnumerable<Post>> GetPostsAsync();
 
         Task<IEnumerable<Post>> GetPostsByCategoryIdAsync(int id);
-        
+
+        Task<bool> Exists(PostDto postDto);
+
     }
 }

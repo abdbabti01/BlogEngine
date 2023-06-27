@@ -19,6 +19,12 @@ namespace BlogAPI.Repositories
         {
             _context = context;
         }
+
+        public void AddCategory(Category category)
+        {
+            _context.Categories.Add(category);
+        }
+
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
             var categories = await _context.Categories.ToListAsync();
@@ -33,14 +39,25 @@ namespace BlogAPI.Repositories
             return category;
         }
 
-        public Task<bool> SaveAllAsync()
+        public async Task<Category> GetCategoryByTitleAsync(string title)
         {
-            throw new NotImplementedException();
+            var category = await _context.Categories.FirstOrDefaultAsync(X => X.Title == title);
+
+            return category;
         }
 
-        public void UpdatePost(Category category)
+        public void UpdateCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            _context.Entry(category).State = EntityState.Modified;
+
         }
+
+        public async Task<bool> SaveAllAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+
+
     }
 }

@@ -46,7 +46,54 @@ namespace BlogAPI.Controllers
 
             return postDto;
 
+        }
 
+
+        [HttpPost("addPost")]
+        public async Task<ActionResult<PostDto>> AddPost(PostDto postDto){
+
+            if(await PostExist(postDto)) return BadRequest("Post Already Exists");
+
+            var post = new Post{
+                Title = postDto.Title,
+                PublicationDate = postDto.PublicationDate,
+                Content = postDto.Content,
+                CategoryId = postDto.CategoryId
+                
+            };
+            
+            _postRepository.AddPost(post);
+
+            if(await _postRepository.SaveAllAsync()) return NoContent();
+        
+            return BadRequest("Failed to add category");
+        
+        }
+
+
+        [HttpPut("updatePost")]
+        public async Task<ActionResult<PostDto>> UpdatePost(PostDto postDto){
+
+            //if(await CatExist(categoryDto)) return BadRequest("Category Already Exists");
+
+            var post = await _postRepository.GetPostByIdAsync(postDto.Id);
+                
+            if(post == null) return NotFound();
+
+            _mapper.Map(postDto, post);
+
+            _postRepository.UpdatePost(post);
+
+            if(await _postRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Failed to update post");
+
+        }
+
+
+        public async Task<bool> PostExist(PostDto postDto){
+
+            return await _postRepository.Exists(postDto);
         }
 
 

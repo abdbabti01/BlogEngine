@@ -1,1 +1,43 @@
-<p>add-post works!</p>
+<form #editForm="ngForm"  id="editform" (ngSubmit)="add()" autocomplete="off" ngNativeValidate>
+    <h2 class="text-center"> Add Post</h2>
+    <h4 class="mt-2">title</h4>
+    <input
+        name="title"
+        [(ngModel)]="model.title"
+        class="form-control" 
+        type="text"
+        required
+        minlength="1"
+        placeholder="title">
+    <h4 class="mt-2">category</h4>
+    <select [(ngModel)]="model.categoryId" id="category" name="category" class="form-control" required>
+        <option  *ngFor="let category of categories" value={{category.id}}>{{category.title}}</option>
+    </select>
+    <h4 class="mt-2">Date pub</h4>
+    <app-date-picker [formControl]="$any(editform.controls['dateOfPub'])" 
+        [label]="'Date of Publication'" [maxDate]="maxDate"  [(ngModel)]="model.PublicationDate"></app-date-picker >
+    <h4 class="mt-2">Content:</h4>
+    <textarea
+        title="content"
+        name="content"
+        [(ngModel)]="model.content"
+        class="form-control" 
+        placeholder="Content"
+        required
+        rows="6" >
+    </textarea>
+
+    <!-- <h4 class="mt-2" >Interests</h4>
+    <textarea
+        title="Interests"
+        name="interests"
+        [(ngModel)]="model.interests"
+        class="form-control" 
+        rows="6" >
+    </textarea> -->
+    <div class="mt-3">
+        <button class="btn btn-success" class="btn btn-outline-secondary btn-lg px-5"type="submit">Save</button>
+        <!-- <button class="btn btn-default" type="button">cancel</button> -->
+    </div>
+
+</form>

@@ -14,7 +14,7 @@ namespace BlogAPI.Entities
 
         public DateTime PublicationDate { get; set; } = DateTime.UtcNow;
 
-        public string   Content { get; set; }
+        public string Content { get; set; }
 
         //RelationShip propreties 
         public int CategoryId { get; set; }

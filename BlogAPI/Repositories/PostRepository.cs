@@ -23,7 +23,7 @@ namespace BlogAPI.Repositories
         public async Task<IEnumerable<Post>> GetPostsAsync()
         {
             
-            var posts = await _context.Posts.ToListAsync();
+            var posts = await _context.Posts.OrderByDescending(p => p.PublicationDate).ToListAsync();
         
             return posts;
         }
@@ -50,6 +50,17 @@ namespace BlogAPI.Repositories
            var posts = await _context.Posts.Where(x => x.CategoryId == id).ToListAsync();
 
            return posts;
+        }
+
+        public void AddPost(Post post)
+        {
+             _context.Posts.Add(post);
+        }
+
+
+        public async Task<bool> Exists(PostDto postDto){
+
+           return await _context.Categories.AnyAsync(X => X.Title == postDto.Title);
         }
     }
 }

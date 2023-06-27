@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BlogAPI.Data;
 using BlogAPI.Dtos;
+using BlogAPI.Entities;
 using BlogAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogAPI.Controllers
 {
@@ -17,11 +20,14 @@ namespace BlogAPI.Controllers
         private readonly IPostRepository _postRepository;
 
         private readonly IMapper _mapper;   
-        public CategoriesController(ICategoryRepository categoryRepository, IPostRepository postRepository, IMapper mapper)
+
+        private readonly DataContext _dataContext;
+        public CategoriesController(ICategoryRepository categoryRepository, IPostRepository postRepository, IMapper mapper, DataContext dataContext)
         {
             _categoryRepository = categoryRepository;
             _postRepository = postRepository;
             _mapper = mapper;
+            _dataContext = dataContext;
         }
         
         [HttpGet]
@@ -61,6 +67,54 @@ namespace BlogAPI.Controllers
             return Ok(postsToReturn);
 
         }
+
+        [HttpPost("addCategory")]
+        public async Task<ActionResult<CategoryDto>> AddCategory(CategoryDto categoryDto){
+
+            if(await CatExist(categoryDto)) return BadRequest("Category Already Exists");
+
+            var category = new Category{
+                Title = categoryDto.Title
+            };
+            
+            _categoryRepository.AddCategory(category);
+
+            if(await _categoryRepository.SaveAllAsync()) return new CategoryDto{
+                Title = category.Title};
+            
+
+            return BadRequest("Failed to add category");
+        
+        }
+
+        
+        [HttpPut("updateCategory")]
+        public async Task<ActionResult<CategoryDto>> UpdateCategory(CategoryDto categoryDto){
+
+            if(await CatExist(categoryDto)) return BadRequest("Category Already Exists");
+
+            var category = await _categoryRepository.GetCategoryByIdAsync(categoryDto.Id);
+                
+            if(category == null) return NotFound();
+
+            _mapper.Map(categoryDto, category);
+
+            _categoryRepository.UpdateCategoryAsync(category);
+
+            if(await _categoryRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Failed to update category");
+
+        }
+
+
+        public async Task<bool> CatExist(CategoryDto categoryDto){
+
+            return await _dataContext.Categories.AnyAsync(X => X.Title == categoryDto.Title);
+        }
+
+
+
         
     }
 }

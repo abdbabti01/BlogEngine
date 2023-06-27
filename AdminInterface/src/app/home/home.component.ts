@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit{
    *
    */
   constructor(private categoryService: CategoryService, private postService: PostService, private router: Router) {
-
+    
   }
 
   ngOnInit(): void {
