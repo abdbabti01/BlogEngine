@@ -6,5 +6,3 @@
   you need :
      - Node.js
      - Angular CLR
-
-  I didn't finist the inteface becaue of time (only the first page )
